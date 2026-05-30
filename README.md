@@ -1,6 +1,35 @@
 # MLIT-LINKS-akiya
 
-国土交通省 Project LINKS が公開する「空き家・空き地バンク登録物件・成約物件データ（2025年度）」を活用したアプリ検討用リポジトリ。
+国土交通省 Project LINKS が公開する「空き家・空き地バンク登録物件・成約物件データ（2025年度）」を可視化する **空き家バンク市場ダッシュボード**（案B）。
+
+**公開先（GitHub Pages）**: https://shinyanakashima.github.io/mlit-links-akiya/
+
+DBを使わない静的サイト構成（Vite + React + TS）。CSVは年1更新なので、ビルド時に Python で集計JSONを生成し、ブラウザ側で描画する。
+
+## 技術スタック
+
+| 層 | 採用 |
+|---|---|
+| 前処理 | Python（標準ライブラリのみ）→ `public/data/aggregates.json` |
+| フロント | Vite + React + TypeScript |
+| 可視化 | Recharts |
+| デプロイ | GitHub Pages + GitHub Actions（push to `main` で自動公開） |
+
+## 開発
+
+```sh
+npm install
+npm run data     # data/*.csv -> public/data/aggregates.json を再生成
+npm run dev      # http://localhost:5173/mlit-links-akiya/
+npm run build    # dist/ を生成
+npm run preview  # ビルド結果をローカル確認
+```
+
+## デプロイ
+
+`main` に push すると `.github/workflows/deploy.yml` が前処理→ビルド→Pages公開まで自動実行する。
+初回のみ GitHub リポジトリの **Settings > Pages > Build and deployment > Source** を **GitHub Actions** に設定すること。
+
 
 ## データ出典
 

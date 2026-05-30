@@ -1,0 +1,518 @@
+{
+  "meta": {
+    "source": "国土交通省 Project LINKS / 空き家・空き地バンク登録物件・成約物件データ(2025年度)",
+    "sourceUrl": "https://www.geospatial.jp/ckan/dataset/links-akiyabank-2025",
+    "asOf": "2025-03-31",
+    "generatedAt": "2026-05-30T20:44:06Z",
+    "totalRegistered": 7746,
+    "totalContracts": 1203,
+    "medianSalePriceAll": 4800000,
+    "medianAgeAll": 50,
+    "ultraCheapCount": 391,
+    "freeCount": 3
+  },
+  "categoriesRegistered": [
+    {
+      "name": "売買居住用",
+      "count": 4883
+    },
+    {
+      "name": "売買土地",
+      "count": 2082
+    },
+    {
+      "name": "賃貸居住用",
+      "count": 537
+    },
+    {
+      "name": "賃貸土地",
+      "count": 165
+    },
+    {
+      "name": "賃貸事業用",
+      "count": 41
+    },
+    {
+      "name": "売買事業用",
+      "count": 38
+    }
+  ],
+  "categoriesContracts": [
+    {
+      "name": "売買居住用",
+      "count": 874
+    },
+    {
+      "name": "賃貸居住用",
+      "count": 205
+    },
+    {
+      "name": "売買土地",
+      "count": 120
+    },
+    {
+      "name": "賃貸事業用",
+      "count": 3
+    },
+    {
+      "name": "売買事業用",
+      "count": 1
+    }
+  ],
+  "structures": [
+    {
+      "name": "木造",
+      "count": 4420
+    },
+    {
+      "name": "指定なし",
+      "count": 2916
+    },
+    {
+      "name": "軽量鉄骨造",
+      "count": 116
+    },
+    {
+      "name": "鉄骨造",
+      "count": 106
+    },
+    {
+      "name": "RC(鉄筋コンクリート)",
+      "count": 96
+    },
+    {
+      "name": "その他",
+      "count": 54
+    },
+    {
+      "name": "ブロック造",
+      "count": 28
+    },
+    {
+      "name": "SRC(鉄骨鉄筋コンクリート)",
+      "count": 8
+    }
+  ],
+  "priceBands": [
+    {
+      "label": "~100万",
+      "count": 205
+    },
+    {
+      "label": "100-300万",
+      "count": 1086
+    },
+    {
+      "label": "300-500万",
+      "count": 1112
+    },
+    {
+      "label": "500万-1千万",
+      "count": 1365
+    },
+    {
+      "label": "1千万-2千万",
+      "count": 634
+    },
+    {
+      "label": "2千万~",
+      "count": 215
+    }
+  ],
+  "ageBands": [
+    {
+      "label": "~20年",
+      "count": 121
+    },
+    {
+      "label": "20-30年",
+      "count": 241
+    },
+    {
+      "label": "30-40年",
+      "count": 527
+    },
+    {
+      "label": "40-50年",
+      "count": 1176
+    },
+    {
+      "label": "50-60年",
+      "count": 1326
+    },
+    {
+      "label": "60年~",
+      "count": 902
+    }
+  ],
+  "prefectures": [
+    {
+      "name": "富山県",
+      "registered": 555,
+      "contracts": 84,
+      "liquidity": 13.1,
+      "medianSalePrice": 4800000,
+      "medianAge": 54
+    },
+    {
+      "name": "北海道",
+      "registered": 549,
+      "contracts": 2,
+      "liquidity": 0.4,
+      "medianSalePrice": 4800000,
+      "medianAge": 44
+    },
+    {
+      "name": "岩手県",
+      "registered": 475,
+      "contracts": 11,
+      "liquidity": 2.3,
+      "medianSalePrice": 4000000,
+      "medianAge": 50
+    },
+    {
+      "name": "兵庫県",
+      "registered": 421,
+      "contracts": 50,
+      "liquidity": 10.6,
+      "medianSalePrice": 5000000,
+      "medianAge": 51
+    },
+    {
+      "name": "新潟県",
+      "registered": 373,
+      "contracts": 35,
+      "liquidity": 8.6,
+      "medianSalePrice": 3000000,
+      "medianAge": 53
+    },
+    {
+      "name": "岡山県",
+      "registered": 345,
+      "contracts": 39,
+      "liquidity": 10.2,
+      "medianSalePrice": 4000000,
+      "medianAge": 54
+    },
+    {
+      "name": "大分県",
+      "registered": 301,
+      "contracts": 303,
+      "liquidity": 50.2,
+      "medianSalePrice": 4500000,
+      "medianAge": 51
+    },
+    {
+      "name": "佐賀県",
+      "registered": 254,
+      "contracts": 11,
+      "liquidity": 4.2,
+      "medianSalePrice": 4990000,
+      "medianAge": 52
+    },
+    {
+      "name": "福島県",
+      "registered": 248,
+      "contracts": 30,
+      "liquidity": 10.8,
+      "medianSalePrice": 5000000,
+      "medianAge": 48
+    },
+    {
+      "name": "山口県",
+      "registered": 241,
+      "contracts": 13,
+      "liquidity": 5.1,
+      "medianSalePrice": 3000000,
+      "medianAge": 52
+    },
+    {
+      "name": "三重県",
+      "registered": 226,
+      "contracts": 82,
+      "liquidity": 26.6,
+      "medianSalePrice": 5000000,
+      "medianAge": 50
+    },
+    {
+      "name": "茨城県",
+      "registered": 226,
+      "contracts": 78,
+      "liquidity": 25.7,
+      "medianSalePrice": 6000000,
+      "medianAge": 43
+    },
+    {
+      "name": "青森県",
+      "registered": 217,
+      "contracts": 7,
+      "liquidity": 3.1,
+      "medianSalePrice": 5300000,
+      "medianAge": 51
+    },
+    {
+      "name": "岐阜県",
+      "registered": 192,
+      "contracts": 9,
+      "liquidity": 4.5,
+      "medianSalePrice": 5800000,
+      "medianAge": 51
+    },
+    {
+      "name": "秋田県",
+      "registered": 188,
+      "contracts": 148,
+      "liquidity": 44.0,
+      "medianSalePrice": 3500000,
+      "medianAge": 48
+    },
+    {
+      "name": "福井県",
+      "registered": 188,
+      "contracts": 9,
+      "liquidity": 4.6,
+      "medianSalePrice": 6000000,
+      "medianAge": 46
+    },
+    {
+      "name": "鹿児島県",
+      "registered": 178,
+      "contracts": 27,
+      "liquidity": 13.2,
+      "medianSalePrice": 3550000,
+      "medianAge": 51
+    },
+    {
+      "name": "栃木県",
+      "registered": 177,
+      "contracts": 10,
+      "liquidity": 5.3,
+      "medianSalePrice": 7000000,
+      "medianAge": 45
+    },
+    {
+      "name": "愛媛県",
+      "registered": 164,
+      "contracts": 10,
+      "liquidity": 5.7,
+      "medianSalePrice": 4000000,
+      "medianAge": 52
+    },
+    {
+      "name": "長野県",
+      "registered": 164,
+      "contracts": 6,
+      "liquidity": 3.5,
+      "medianSalePrice": 7500000,
+      "medianAge": 50
+    },
+    {
+      "name": "京都府",
+      "registered": 163,
+      "contracts": 30,
+      "liquidity": 15.5,
+      "medianSalePrice": 3200000,
+      "medianAge": 48
+    },
+    {
+      "name": "奈良県",
+      "registered": 160,
+      "contracts": 1,
+      "liquidity": 0.6,
+      "medianSalePrice": 3000000,
+      "medianAge": 53
+    },
+    {
+      "name": "宮崎県",
+      "registered": 154,
+      "contracts": 7,
+      "liquidity": 4.3,
+      "medianSalePrice": 4250000,
+      "medianAge": 51
+    },
+    {
+      "name": "群馬県",
+      "registered": 145,
+      "contracts": 12,
+      "liquidity": 7.6,
+      "medianSalePrice": 5000000,
+      "medianAge": 48
+    },
+    {
+      "name": "高知県",
+      "registered": 128,
+      "contracts": 4,
+      "liquidity": 3.0,
+      "medianSalePrice": 3000000,
+      "medianAge": 51
+    },
+    {
+      "name": "徳島県",
+      "registered": 119,
+      "contracts": 5,
+      "liquidity": 4.0,
+      "medianSalePrice": 4000000,
+      "medianAge": 52
+    },
+    {
+      "name": "熊本県",
+      "registered": 117,
+      "contracts": 7,
+      "liquidity": 5.6,
+      "medianSalePrice": 5000000,
+      "medianAge": 51
+    },
+    {
+      "name": "福岡県",
+      "registered": 107,
+      "contracts": 25,
+      "liquidity": 18.9,
+      "medianSalePrice": 7000000,
+      "medianAge": 52
+    },
+    {
+      "name": "山梨県",
+      "registered": 96,
+      "contracts": 17,
+      "liquidity": 15.0,
+      "medianSalePrice": 8400000,
+      "medianAge": 48
+    },
+    {
+      "name": "広島県",
+      "registered": 93,
+      "contracts": 9,
+      "liquidity": 8.8,
+      "medianSalePrice": 4300000,
+      "medianAge": 51
+    },
+    {
+      "name": "山形県",
+      "registered": 91,
+      "contracts": 36,
+      "liquidity": 28.3,
+      "medianSalePrice": 3000000,
+      "medianAge": 50
+    },
+    {
+      "name": "長崎県",
+      "registered": 89,
+      "contracts": 16,
+      "liquidity": 15.2,
+      "medianSalePrice": 4650000,
+      "medianAge": 48
+    },
+    {
+      "name": "和歌山県",
+      "registered": 83,
+      "contracts": 3,
+      "liquidity": 3.5,
+      "medianSalePrice": 3200000,
+      "medianAge": 53
+    },
+    {
+      "name": "宮城県",
+      "registered": 81,
+      "contracts": 13,
+      "liquidity": 13.8,
+      "medianSalePrice": 4000000,
+      "medianAge": 47
+    },
+    {
+      "name": "千葉県",
+      "registered": 70,
+      "contracts": 6,
+      "liquidity": 7.9,
+      "medianSalePrice": 7800000,
+      "medianAge": 43
+    },
+    {
+      "name": "愛知県",
+      "registered": 65,
+      "contracts": 6,
+      "liquidity": 8.5,
+      "medianSalePrice": 9500000,
+      "medianAge": 49
+    },
+    {
+      "name": "鳥取県",
+      "registered": 59,
+      "contracts": 5,
+      "liquidity": 7.8,
+      "medianSalePrice": 5250000,
+      "medianAge": 47
+    },
+    {
+      "name": "静岡県",
+      "registered": 53,
+      "contracts": 3,
+      "liquidity": 5.4,
+      "medianSalePrice": 8850000,
+      "medianAge": 44
+    },
+    {
+      "name": "石川県",
+      "registered": 43,
+      "contracts": 3,
+      "liquidity": 6.5,
+      "medianSalePrice": 5000000,
+      "medianAge": 54
+    },
+    {
+      "name": "埼玉県",
+      "registered": 27,
+      "contracts": 9,
+      "liquidity": 25.0,
+      "medianSalePrice": 8600000,
+      "medianAge": 42
+    },
+    {
+      "name": "神奈川県",
+      "registered": 27,
+      "contracts": 1,
+      "liquidity": 3.6,
+      "medianSalePrice": 8400000,
+      "medianAge": 38
+    },
+    {
+      "name": "香川県",
+      "registered": 26,
+      "contracts": 0,
+      "liquidity": 0.0,
+      "medianSalePrice": 7350000,
+      "medianAge": 38
+    },
+    {
+      "name": "大阪府",
+      "registered": 25,
+      "contracts": 7,
+      "liquidity": 21.9,
+      "medianSalePrice": 5750000,
+      "medianAge": 56
+    },
+    {
+      "name": "島根県",
+      "registered": 21,
+      "contracts": 11,
+      "liquidity": 34.4,
+      "medianSalePrice": 3250000,
+      "medianAge": 50
+    },
+    {
+      "name": "東京都",
+      "registered": 11,
+      "contracts": 1,
+      "liquidity": 8.3,
+      "medianSalePrice": 12800000,
+      "medianAge": 46
+    },
+    {
+      "name": "滋賀県",
+      "registered": 11,
+      "contracts": 2,
+      "liquidity": 15.4,
+      "medianSalePrice": 9750000,
+      "medianAge": 53
+    }
+  ]
+}
