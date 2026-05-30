@@ -2,7 +2,7 @@
 
 国土交通省 Project LINKS が公開する「空き家・空き地バンク登録物件・成約物件データ（2025年度）」を可視化する **空き家バンク市場ダッシュボード**（案B）。
 
-**公開先（GitHub Pages）**: https://shinyanakashima.github.io/mlit-links-akiya/
+**公開先（GitHub Pages）**: https://shinyanakashima.github.io/MLIT-LINKS-akiya/
 
 DBを使わない静的サイト構成（Vite + React + TS）。CSVは年1更新なので、ビルド時に Python で集計JSONを生成し、ブラウザ側で描画する。
 
@@ -20,7 +20,7 @@ DBを使わない静的サイト構成（Vite + React + TS）。CSVは年1更新
 ```sh
 npm install
 npm run data     # data/*.csv -> public/data/aggregates.json を再生成
-npm run dev      # http://localhost:5173/mlit-links-akiya/
+npm run dev      # http://localhost:5173/MLIT-LINKS-akiya/
 npm run build    # dist/ を生成
 npm run preview  # ビルド結果をローカル確認
 ```
