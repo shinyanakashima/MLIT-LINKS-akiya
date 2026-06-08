@@ -26,8 +26,14 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Generate aggregates.json
-        run: python3 scripts/preprocess.py
+      # P5(MLIT-LINKS-akiya-pipeline)が正規化レコードJSONを供給するまでの暫定:
+      # ローカルの生CSVから正規化レコードを生成する。P5完成後はこのステップを
+      # 「P5成果物の取得 (例: actions/download-artifact)」に差し替える。
+      - name: Normalize raw CSV (暫定 / P5代替)
+        run: python3 scripts/normalize.py
+
+      - name: Aggregate -> public/data/aggregates.json
+        run: python3 scripts/aggregate.py
 
       - name: Set up Node
         uses: actions/setup-node@v4

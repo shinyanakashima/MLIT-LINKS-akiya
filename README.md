@@ -4,13 +4,48 @@
 
 **公開先（GitHub Pages）**: https://shinyanakashima.github.io/MLIT-LINKS-akiya/
 
-DBを使わない静的サイト構成（Vite + React + TS）。CSVは年1更新なので、ビルド時に Python で集計JSONを生成し、ブラウザ側で描画する。
+DBを使わない静的サイト構成（Vite + React + TS）。CSVは年1更新なので、ビルド時に集計JSONを生成し、ブラウザ側で描画する。
+
+## 責務分担（スリム化方針）
+
+生CSVの汎用的な前処理は **MLIT-LINKS-akiya-pipeline（P5）** へ移管し、本リポジトリは
+**「P5が出力した正規化レコードJSONを入力に、集計と描画だけを行う」** 構成とする。
+
+| 処理 | 担当 |
+|---|---|
+| CSV取り込み（BOM/改行対応）、売買賃貸分離、単位正規化、築年丸め、列名整理・型付け、登録×成約の突合と成約フラグ生成 | **P5（pipeline）** |
+| 正規化レコード → 自治体別集計（登録数/種別構成/築年分布/価格帯/成約傾向）、`aggregates.json` 生成、描画 | **本リポジトリ（suryey）** |
+
+P5とのインターフェース（正規化レコードの形）は [`schema/normalized-records.schema.json`](schema/normalized-records.schema.json) で固定している。
+
+> **暫定措置:** P5が完成するまでは `scripts/normalize.py` がローカルの生CSVから
+> スキーマ準拠の正規化レコード（`data/normalized/records.json`）を生成し、ビルドが
+> 通るようにしている。P5完成後はこのスクリプトを廃止し、P5の出力JSONを
+> `data/normalized/records.json` に置く（または環境変数 `RECORDS_JSON` で差し替える）だけでよい。
+
+## データフロー
+
+```mermaid
+flowchart LR
+  subgraph P5["MLIT-LINKS-akiya-pipeline (P5)"]
+    CSV["生CSV<br/>登録 / 成約"] --> NORM["取り込み・正規化・突合<br/>(BOM/単位/築年/成約フラグ)"]
+    NORM --> REC["正規化レコードJSON<br/>(normalized-records schema)"]
+  end
+  subgraph SURYEY["MLIT-LINKS-akiya-suryey (本リポジトリ)"]
+    REC --> AGG["scripts/aggregate.py<br/>自治体別集計"]
+    AGG --> JSON["public/data/aggregates.json"]
+    JSON --> UI["React + Recharts<br/>ダッシュボード"]
+  end
+```
+
+暫定構成では `P5` のブロックを `scripts/normalize.py`（生CSV → 正規化レコードJSON）が代替する。
 
 ## 技術スタック
 
 | 層 | 採用 |
 |---|---|
-| 前処理 | Python（標準ライブラリのみ）→ `public/data/aggregates.json` |
+| 集計 | Python（標準ライブラリのみ）`scripts/aggregate.py` → `public/data/aggregates.json` |
+| 正規化（暫定/将来P5） | Python `scripts/normalize.py` → `data/normalized/records.json` |
 | フロント | Vite + React + TypeScript |
 | 可視化 | Recharts |
 | デプロイ | GitHub Pages + GitHub Actions（push to `main` で自動公開） |
@@ -19,11 +54,16 @@ DBを使わない静的サイト構成（Vite + React + TS）。CSVは年1更新
 
 ```sh
 npm install
-npm run data     # data/*.csv -> public/data/aggregates.json を再生成
-npm run dev      # http://localhost:5173/MLIT-LINKS-akiya/
-npm run build    # dist/ を生成
-npm run preview  # ビルド結果をローカル確認
+npm run normalize  # 【暫定/P5代替】data/*.csv -> data/normalized/records.json
+npm run aggregate  # data/normalized/records.json -> public/data/aggregates.json
+npm run data       # normalize + aggregate を一括実行
+npm run dev        # http://localhost:5173/MLIT-LINKS-akiya/
+npm run build      # dist/ を生成
+npm run preview    # ビルド結果をローカル確認
 ```
+
+P5の正規化レコードJSONが手元にある場合は、`scripts/normalize.py` を実行せずに
+そのファイルを `data/normalized/records.json` に置く（または `RECORDS_JSON=/path/to/records.json npm run aggregate`）。
 
 ## デプロイ
 

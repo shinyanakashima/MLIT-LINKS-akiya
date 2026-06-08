@@ -4,7 +4,9 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "data": "python3 scripts/preprocess.py",
+    "normalize": "python3 scripts/normalize.py",
+    "aggregate": "python3 scripts/aggregate.py",
+    "data": "npm run normalize && npm run aggregate",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview"

@@ -6,3 +6,6 @@ dist/
 __pycache__/
 vite.config.js
 vite.config.d.ts
+
+# P5(正規化レコード)入力 — ローカル生成/取得した中間成果物
+data/normalized/

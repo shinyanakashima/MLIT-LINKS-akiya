@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/shinyanakashima/mlit-links-akiya-suryey/schema/normalized-records.schema.json",
+  "title": "空き家バンク 正規化レコード (P5出力)",
+  "description": "MLIT-LINKS-akiya-pipeline (P5) が生成する正規化済みレコードのスキーマ。本リポジトリ(suryey)はこのJSONのみを入力に取り、集計(aggregates.json)と描画を行う。生CSVの取り込み・正規化・突合はP5側の責務とする。",
+  "type": "object",
+  "required": ["meta", "records"],
+  "additionalProperties": false,
+  "properties": {
+    "meta": {
+      "type": "object",
+      "description": "データセットの素性情報。P5が付与する。",
+      "required": ["schemaVersion", "source", "asOf"],
+      "additionalProperties": true,
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "description": "本スキーマのバージョン。互換性判定に用いる。",
+          "examples": ["1.0"]
+        },
+        "source": {
+          "type": "string",
+          "description": "出典の表示名。"
+        },
+        "sourceUrl": {
+          "type": "string",
+          "description": "出典データセットのURL。"
+        },
+        "asOf": {
+          "type": "string",
+          "description": "データ対象時点 (YYYY-MM-DD)。築年数の基準年に用いる。",
+          "examples": ["2025-03-31"]
+        },
+        "generatedBy": {
+          "type": "string",
+          "description": "生成元 (例: 'MLIT-LINKS-akiya-pipeline' または暫定の 'scripts/normalize.py')。"
+        },
+        "generatedAt": {
+          "type": "string",
+          "description": "生成日時 (ISO8601 UTC)。"
+        }
+      }
+    },
+    "records": {
+      "type": "array",
+      "description": "正規化済みの物件レコード配列。登録物件と成約物件を type で区別して1配列に格納する。",
+      "items": { "$ref": "#/definitions/record" }
+    }
+  },
+  "definitions": {
+    "record": {
+      "type": "object",
+      "required": ["type", "prefecture", "category", "contracted"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "レコード種別。登録物件(在庫) か 成約物件 か。",
+          "enum": ["registration", "contract"]
+        },
+        "id": {
+          "type": ["string", "null"],
+          "description": "物件番号 (登録: PROPERTY_NUMBER_ID / 成約: ID)。突合キー。"
+        },
+        "prefecture": {
+          "type": "string",
+          "description": "都道府県名。"
+        },
+        "city": {
+          "type": ["string", "null"],
+          "description": "市区町村名 (自治体別集計の将来拡張用)。"
+        },
+        "category": {
+          "type": "string",
+          "description": "元の物件種別 (PROPERTY_CATEGORY)。例: '売買居住用', '売買土地', '賃貸居住用'。"
+        },
+        "transaction": {
+          "type": ["string", "null"],
+          "description": "売買賃貸分離の結果。",
+          "enum": ["売買", "賃貸", null]
+        },
+        "useType": {
+          "type": ["string", "null"],
+          "description": "用途分類。",
+          "enum": ["居住用", "土地", "事業用", null]
+        },
+        "structure": {
+          "type": ["string", "null"],
+          "description": "建物構造 (CONSTRUCTION)。例: '木造'。土地等は null。"
+        },
+        "buildYear": {
+          "type": ["integer", "null"],
+          "description": "築年正規化の結果 (西暦年)。DATE_OF_CONSTRUCTION を年に丸めたもの。"
+        },
+        "price": {
+          "type": ["integer", "null"],
+          "description": "単位正規化済みの金額(円)。売買は価格、賃貸は賃料。AMOUNT/RENT 由来。"
+        },
+        "isRent": {
+          "type": "boolean",
+          "description": "price が賃料 (賃貸) か否か。"
+        },
+        "contracted": {
+          "type": "boolean",
+          "description": "成約フラグ。登録×成約の突合結果。type=contract は常に true、type=registration は突合一致時に true。"
+        },
+        "contractDate": {
+          "type": ["string", "null"],
+          "description": "成約日 (YYYY-MM-DD)。type=contract のみ。"
+        },
+        "contractPrice": {
+          "type": ["integer", "null"],
+          "description": "成約金額(円)。type=contract のみ。"
+        }
+      }
+    }
+  }
+}

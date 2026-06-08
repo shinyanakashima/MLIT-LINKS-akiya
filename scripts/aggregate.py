@@ -1,46 +1,38 @@
 #!/usr/bin/env python3
-"""空き家・空き地バンクの登録/成約CSVを、ダッシュボード用の集計JSONに変換する。
+"""正規化レコードJSON → ダッシュボード用の集計JSON。
 
-標準ライブラリのみで完結させ、CI(GitHub Actions)で依存インストール不要にする。
+入力: data/normalized/records.json (P5が出力する正規化レコード。
+      schema/normalized-records.schema.json 準拠)
 出力: public/data/aggregates.json
+
+本リポジトリ(suryey)に残す責務はここ: 自治体(都道府県)別の集計
+(登録数/種別構成/築年分布/価格帯/成約傾向) と aggregates.json 生成のみ。
+生CSVの取り込み・正規化・突合は P5 が担い、本スクリプトは触れない。
+標準ライブラリのみで完結させ、CI(GitHub Actions)で依存インストール不要にする。
 """
-import csv
 import json
 import os
 import statistics
+import sys
 from datetime import datetime, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-REG_CSV = os.path.join(ROOT, "data", "01_tourokubukken.csv")
-CON_CSV = os.path.join(ROOT, "data", "02_seiyakubukken.csv")
+# 入力は環境変数 RECORDS_JSON で差し替え可能(P5の出力先に向けるため)
+IN = os.environ.get("RECORDS_JSON") or os.path.join(ROOT, "data", "normalized", "records.json")
 OUT = os.path.join(ROOT, "public", "data", "aggregates.json")
 
-AS_OF = "2025-03-31"
 
-
-def read_csv(path):
-    # BOM付きUTF-8。utf-8-sigで先頭BOMを除去
-    with open(path, encoding="utf-8-sig", newline="") as f:
-        return list(csv.DictReader(f))
-
-
-def to_float(v):
-    try:
-        return float(v)
-    except (TypeError, ValueError):
-        return None
-
-
-def build_year(v):
-    if not v:
-        return None
-    s = str(v).strip()
-    for fmt in ("%Y/%m/%d", "%Y-%m-%d", "%Y/%m", "%Y"):
-        try:
-            return datetime.strptime(s, fmt).year
-        except ValueError:
-            continue
-    return None
+def load_records(path):
+    if not os.path.exists(path):
+        sys.exit(
+            f"正規化レコードJSONが見つかりません: {path}\n"
+            "P5の出力を配置するか、暫定的に `python3 scripts/normalize.py` で生成してください。"
+        )
+    with open(path, encoding="utf-8") as f:
+        doc = json.load(f)
+    if "records" not in doc:
+        sys.exit(f"{path}: 'records' 配列がありません (スキーマ不一致)")
+    return doc.get("meta", {}), doc["records"]
 
 
 def median(values):
@@ -51,15 +43,29 @@ def median(values):
 def counter(rows, key):
     out = {}
     for r in rows:
-        v = (r.get(key) or "").strip()
+        v = (r.get(key) or "")
+        v = v.strip() if isinstance(v, str) else v
         if v:
             out[v] = out.get(v, 0) + 1
     return out
 
 
+def to_list(d, top=None):
+    items = sorted(
+        ({"name": k, "count": v} for k, v in d.items()),
+        key=lambda x: x["count"],
+        reverse=True,
+    )
+    return items[:top] if top else items
+
+
 def main():
-    reg = read_csv(REG_CSV)
-    con = read_csv(CON_CSV)
+    meta_in, records = load_records(IN)
+    as_of = meta_in.get("asOf", "2025-03-31")
+    ref_year = int(str(as_of)[:4])
+
+    reg = [r for r in records if r.get("type") == "registration"]
+    con = [r for r in records if r.get("type") == "contract"]
 
     # --- 都道府県別集計 ---
     prefs = {}
@@ -71,21 +77,21 @@ def main():
         )
 
     for r in reg:
-        p = (r.get("PREFECTURE") or "").strip()
+        p = (r.get("prefecture") or "").strip()
         if not p:
             continue
         s = slot(p)
         s["registered"] += 1
-        if r.get("PROPERTY_CATEGORY") == "売買居住用":
-            price = to_float(r.get("AMOUNT/RENT"))
+        if r.get("category") == "売買居住用":
+            price = r.get("price")
             if price and price > 0:
                 s["_salePrices"].append(price)
-        y = build_year(r.get("DATE_OF_CONSTRUCTION"))
+        y = r.get("buildYear")
         if y:
-            s["_ages"].append(2025 - y)
+            s["_ages"].append(ref_year - y)
 
     for r in con:
-        p = (r.get("PREFECTURE") or "").strip()
+        p = (r.get("prefecture") or "").strip()
         if not p:
             continue
         slot(p)["contracts"] += 1
@@ -117,9 +123,7 @@ def main():
         ("2千万~", 20_000_000, float("inf")),
     ]
     sale_prices = [
-        to_float(r.get("AMOUNT/RENT"))
-        for r in reg
-        if r.get("PROPERTY_CATEGORY") == "売買居住用"
+        r.get("price") for r in reg if r.get("category") == "売買居住用"
     ]
     sale_prices = [p for p in sale_prices if p is not None and p >= 0]
     price_bands = [
@@ -136,26 +140,17 @@ def main():
         ("50-60年", 50, 60),
         ("60年~", 60, float("inf")),
     ]
-    ages = [2025 - y for r in reg if (y := build_year(r.get("DATE_OF_CONSTRUCTION")))]
+    ages = [ref_year - y for r in reg if (y := r.get("buildYear"))]
     age_bands = [
         {"label": lbl, "count": sum(1 for a in ages if lo <= a < hi)}
         for lbl, lo, hi in age_defs
     ]
 
-    # --- 構造 / カテゴリ ---
-    def to_list(d, top=None):
-        items = sorted(
-            ({"name": k, "count": v} for k, v in d.items()),
-            key=lambda x: x["count"],
-            reverse=True,
-        )
-        return items[:top] if top else items
-
     data = {
         "meta": {
-            "source": "国土交通省 Project LINKS / 空き家・空き地バンク登録物件・成約物件データ(2025年度)",
-            "sourceUrl": "https://www.geospatial.jp/ckan/dataset/links-akiyabank-2025",
-            "asOf": AS_OF,
+            "source": meta_in.get("source", ""),
+            "sourceUrl": meta_in.get("sourceUrl", ""),
+            "asOf": as_of,
             "generatedAt": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "totalRegistered": len(reg),
             "totalContracts": len(con),
@@ -164,9 +159,9 @@ def main():
             "ultraCheapCount": sum(1 for p in sale_prices if p <= 1_000_000),
             "freeCount": sum(1 for p in sale_prices if p == 0),
         },
-        "categoriesRegistered": to_list(counter(reg, "PROPERTY_CATEGORY")),
-        "categoriesContracts": to_list(counter(con, "PROPERTY_CATEGORY")),
-        "structures": to_list(counter(reg, "CONSTRUCTION"), top=8),
+        "categoriesRegistered": to_list(counter(reg, "category")),
+        "categoriesContracts": to_list(counter(con, "category")),
+        "structures": to_list(counter(reg, "structure"), top=8),
         "priceBands": price_bands,
         "ageBands": age_bands,
         "prefectures": prefectures,
