@@ -32,9 +32,33 @@ a {
   padding: 24px 20px 64px;
 }
 
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 header h1 {
   font-size: 1.6rem;
   margin: 0 0 6px;
+}
+
+.lang-toggle {
+  flex: none;
+  background: var(--panel);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.lang-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 header .sub {
